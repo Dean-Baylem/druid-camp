@@ -1,5 +1,5 @@
 import { OrbitControls } from "@react-three/drei";
-import Campfire from "./campfire/Campfire";
+import Scene from "./scene/Scene";
 
 export default function Experience() {
 
@@ -11,10 +11,13 @@ export default function Experience() {
             />
             <OrbitControls makeDefault />
 
-            <ambientLight intensity={1} />
-            <directionalLight position={[10, 10, 5]} intensity={1.5} />
-
-            <Campfire />
+            <ambientLight intensity={0.2} />
+            <directionalLight
+                position={[10, 10, 5]}
+                intensity={0.7}
+                castShadow
+            />
+            <Scene />
         </>
     );
 }
