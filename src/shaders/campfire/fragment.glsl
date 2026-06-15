@@ -4,7 +4,6 @@ uniform float uSpeed;
 uniform float uIntensity;
 
 varying vec2 vUv;
-varying vec3 vPosition;
 
 void main() {
   // Scroll UVs upward over time

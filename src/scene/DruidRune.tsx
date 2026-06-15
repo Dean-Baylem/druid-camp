@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { shaderMaterial, useGLTF, useTexture } from "@react-three/drei";
-import { useRef, useEffect } from "react";
+import { useRef } from "react";
 import { extend, useFrame } from "@react-three/fiber";
 import type { ThreeElement } from "@react-three/fiber";
 import runeVertexShader from "../shaders/rune/vertex.glsl";
