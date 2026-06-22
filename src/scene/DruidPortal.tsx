@@ -5,13 +5,13 @@ import { extend, useFrame } from "@react-three/fiber";
 import type { ThreeElement } from "@react-three/fiber";
 import portalVertexShader from "../shaders/druidPortal/vertex.glsl";
 import portalFragmentShader from "../shaders/druidPortal/fragment.glsl";
-import { useControls } from 'leva';
+
 
 const PortalMaterial = shaderMaterial(
     {
         uTime: 0,
-        uPortalColor: new THREE.Vector3(0, 0, 0),
         uNoise: new THREE.Texture(),
+        uWeights: new THREE.Vector4(1, 0, 0, 0)
     },
     portalVertexShader,
     portalFragmentShader
@@ -25,12 +25,19 @@ declare module "@react-three/fiber" {
     }
 }
 
-export default function DruidPortal({portalType}: {portalType: string}) {
-    const { nodes } = useGLTF("/models/scene/scene.glb");
-    const portalObj = nodes["druidPortal"] as THREE.Mesh;
-    const portalMaterialRef = useRef<InstanceType<typeof PortalMaterial>>(null!);
+type Weights = [number, number, number, number];
+type PortalType = 'fireRune' | 'waterRune' | 'earthRune' | 'windRune';
 
-    const { xPos, yPos, zPos, color } = useControls('Portal Position', {xPos: -6.4, yPos: -1.1, zPos: -7.7, color: { r: 1, g: 1, b: 1 }});
+const portalWeights: Record<PortalType, Weights> = {
+    fireRune: [1, 0, 0, 0],
+    waterRune: [0, 1, 0, 0],
+    windRune: [0, 0, 1, 0],
+    earthRune: [0, 0, 0, 1],
+};
+
+export default function DruidPortal({portalType}: {portalType: PortalType}) {
+    const portalMaterialRef = useRef<InstanceType<typeof PortalMaterial>>(null!);
+    const targetWeights = useRef(new THREE.Vector4(1, 0, 0, 0));
 
     const noiseTexture = useTexture("/perlin/noiseTexture.png");
     noiseTexture.wrapS = THREE.RepeatWrapping;
@@ -39,17 +46,22 @@ export default function DruidPortal({portalType}: {portalType: string}) {
     useFrame((_state, delta) => {
         if (portalMaterialRef.current) {
             portalMaterialRef.current.uTime += delta;
-            portalMaterialRef.current.uPortalColor.set( color.r / 255, color.g / 255, color.b / 255 );
+            portalMaterialRef.current.uWeights.lerp(targetWeights.current, delta * 2);
         }
     });
 
-    console.log(color);
+    useEffect(() => {
+        if (portalMaterialRef.current) {
+            const chosenColor = portalWeights[portalType] || portalWeights.fireRune;
+            targetWeights.current.set(...chosenColor);
+        }
+    }, [portalType]);
 
     return (
         <>
-            <mesh position={[xPos, yPos, zPos]}>
-                <planeGeometry args={[1.4, 1.4, 24, 24]} />
-                <portalMaterial ref={portalMaterialRef} uNoise={noiseTexture} side={THREE.DoubleSide} />
+            <mesh position={[-6.35, -1.1, -7.7]}>
+                <planeGeometry args={[1.46, 1.65, 24, 24]} />
+                <portalMaterial ref={portalMaterialRef} uNoise={noiseTexture} side={THREE.DoubleSide} transparent depthWrite={false}/>
             </mesh>
         </>
     )

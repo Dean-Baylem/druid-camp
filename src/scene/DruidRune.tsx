@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { shaderMaterial, useGLTF, useTexture } from "@react-three/drei";
+import { shaderMaterial, useGLTF, useTexture, Sparkles } from "@react-three/drei";
 import { useRef } from "react";
 import { extend, useFrame } from "@react-three/fiber";
 import type { ThreeElement } from "@react-three/fiber";
@@ -24,6 +24,8 @@ declare module "@react-three/fiber" {
     }
 }
 
+type PortalType = "fireRune" | "waterRune" | "earthRune" | "windRune";
+
 export default function DruidRune({
     color,
     runeName,
@@ -33,9 +35,10 @@ export default function DruidRune({
     color: [number, number, number];
     runeName: string;
     position: [number, number, number];
-    activeSwitch: (runeName: string) => void;
+    activeSwitch: (runeName: PortalType) => void;
 }) {
     const { nodes } = useGLTF("/models/scene/scene.glb");
+    console.log(nodes);
     const runeObj = nodes[runeName] as THREE.Mesh;
     const runeMaterialRef = useRef<InstanceType<typeof RuneMaterial>>(null!);
 
@@ -53,9 +56,11 @@ export default function DruidRune({
         <group
             position={new THREE.Vector3(...position)}
             onClick={() => {
-                activeSwitch(runeName);
+                console.log(`Clicked ${runeName}`);
+                activeSwitch(runeName as PortalType);
             }}
         >
+            <Sparkles size={12} scale={[0.5, 0.5, 0.5]} color={new THREE.Color(...color)} speed={0.5} count={40}/>
             {/* Clickable Area */}
             <mesh visible={false}>
                 <sphereGeometry args={[0.25]} />

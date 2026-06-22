@@ -2,8 +2,10 @@ import DruidPortal from "./DruidPortal";
 import DruidRune from "./DruidRune";
 import { useState, useEffect } from "react";
 
+type PortalType = "fireRune" | "waterRune" | "earthRune" | "windRune";
+
 export default function DruidGrove() {
-    const [activeRune, setActiveRune] = useState<string>("earthRune");
+    const [activeRune, setActiveRune] = useState<PortalType>("fireRune");
 
     useEffect(() => {
         console.log(`Current Active Rune: ${activeRune}`);
@@ -40,7 +42,7 @@ export default function DruidGrove() {
                     color={rune.color}
                     runeName={rune.name}
                     position={rune.position}
-                    activeSwitch={(name: string) => {
+                    activeSwitch={(name: PortalType) => {
                         setActiveRune(name);
                     }}
                 />

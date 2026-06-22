@@ -11,7 +11,7 @@ void main() {
   vec2 scrolledUv = vUv + vec2(0.0, -uTime * uSpeed * 0.4);
 
   // Sample noise twice at different scales for turbulence
-  float noise1 = texture2D(uNoise, scrolledUv * 1.0).r;
+  float noise1 = texture2D(uNoise, scrolledUv).r;
   float noise2 = texture2D(uNoise, scrolledUv * 2.0 + 0.3).r;
   float noise = (noise1 + noise2) * 0.5;
 
@@ -22,9 +22,9 @@ void main() {
   flameMask = clamp(flameMask * uIntensity + noise - 0.3, 0.0, 1.0);
 
   // Feather edges
-    float edgeX = smoothstep(0.0, 0.15, vUv.x) * smoothstep(1.0, 0.85, vUv.x);
-    float edgeY = smoothstep(0.0, 0.05, vUv.y) * smoothstep(1.0, 0.7, vUv.y);
-    flameMask *= edgeX * edgeY;
+  float edgeX = smoothstep(0.0, 0.15, vUv.x) * smoothstep(1.0, 0.85, vUv.x);
+  float edgeY = smoothstep(0.0, 0.05, vUv.y) * smoothstep(1.0, 0.7, vUv.y);
+  flameMask *= edgeX * edgeY;
 
   // Create the color gradient
   vec3 colorBottom = vec3(1.0, 0.6, 0.3);

@@ -1,6 +1,7 @@
 import { Center, useGLTF } from "@react-three/drei";
 import Campfire from "./Campfire";
 import DruidGrove from "./DruidGrove";
+import ShrineCandles from "./ShrineCandles";
 
 export default function Scene() {
     const { nodes, scene } = useGLTF("/models/scene/scene.glb");
@@ -14,6 +15,7 @@ export default function Scene() {
 
             <Campfire />
             <DruidGrove />
+            <ShrineCandles />
         </>
     );
 }
