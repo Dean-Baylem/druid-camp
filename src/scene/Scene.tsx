@@ -4,7 +4,7 @@ import DruidGrove from "./DruidGrove";
 import ShrineCandles from "./ShrineCandles";
 
 export default function Scene() {
-    const { nodes, scene } = useGLTF("/models/scene/scene.glb");
+    const { nodes } = useGLTF("/models/scene/scene.glb");
     
     return (
         <>

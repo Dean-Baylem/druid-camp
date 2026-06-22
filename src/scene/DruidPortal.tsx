@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { useGLTF, shaderMaterial, useTexture } from "@react-three/drei";
+import { shaderMaterial, useTexture } from "@react-three/drei";
 import { useRef, useEffect } from "react";
 import { extend, useFrame } from "@react-three/fiber";
 import type { ThreeElement } from "@react-three/fiber";
@@ -43,7 +43,7 @@ export default function DruidPortal({portalType}: {portalType: PortalType}) {
     noiseTexture.wrapS = THREE.RepeatWrapping;
     noiseTexture.wrapT = THREE.RepeatWrapping;
 
-    useFrame((_state, delta) => {
+    useFrame((_, delta) => {
         if (portalMaterialRef.current) {
             portalMaterialRef.current.uTime += delta;
             portalMaterialRef.current.uWeights.lerp(targetWeights.current, delta * 2);

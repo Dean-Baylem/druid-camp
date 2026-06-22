@@ -51,7 +51,7 @@ export default function ShrineCandles() {
     const flameMaterialRefs = useRef<InstanceType<typeof FlameMaterial>[]>([]);
 
     useFrame((_state, delta) => {
-        flameMaterialRefs.current.forEach((material, i) => {
+        flameMaterialRefs.current.forEach((material, _) => {
             material.uTime += delta;
         });
     });

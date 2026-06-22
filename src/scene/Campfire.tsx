@@ -36,7 +36,7 @@ export default function Campfire() {
     const pointLightRef = useRef<THREE.PointLight>(null!);
     const targetIntensity = useRef(6);
 
-    useFrame((state, delta) => {
+    useFrame((_, delta) => {
         materialsRef.current.forEach((mat) => {
             if (mat) mat.uTime += delta;
         });

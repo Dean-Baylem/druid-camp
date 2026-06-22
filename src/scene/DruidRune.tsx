@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { shaderMaterial, useGLTF, useTexture, Sparkles } from "@react-three/drei";
 import { useRef } from "react";
 import { extend, useFrame } from "@react-three/fiber";
-import type { ThreeElement } from "@react-three/fiber";
+import type { ThreeElement, ThreeEvent } from "@react-three/fiber";
 import runeVertexShader from "../shaders/rune/vertex.glsl";
 import runeFragmentShader from "../shaders/rune/fragment.glsl";
 
@@ -53,29 +53,38 @@ export default function DruidRune({
     });
 
     return (
-        <group
-            position={new THREE.Vector3(...position)}
-            onClick={() => {
-                console.log(`Clicked ${runeName}`);
-                activeSwitch(runeName as PortalType);
-            }}
-        >
-            <Sparkles size={12} scale={[0.5, 0.5, 0.5]} color={new THREE.Color(...color)} speed={0.5} count={40}/>
-            {/* Clickable Area */}
-            <mesh visible={false}>
-                <sphereGeometry args={[0.25]} />
-            </mesh>
-            <mesh
-                geometry={runeObj.geometry}
-                rotation={runeObj.rotation}
-                scale={runeObj.scale}
+        <>
+            <Sparkles
+                size={12}
+                scale={[0.5, 0.5, 0.5]}
+                color={new THREE.Color(...color)}
+                speed={0.5}
+                count={40}
+                position={new THREE.Vector3(...position)}
+            />
+            <group
+                position={new THREE.Vector3(...position)}
+                onClick={(e: ThreeEvent<MouseEvent>) => {
+                    e.stopPropagation();
+                    activeSwitch(runeName as PortalType);
+                }}
             >
-                <runeMaterial
-                    ref={runeMaterialRef}
-                    uNoise={noiseTexture}
-                    uRuneColor={new THREE.Vector3(...color)}
-                />
-            </mesh>
-        </group>
+                {/* Clickable Area */}
+                <mesh visible={false}>
+                    <sphereGeometry args={[0.25]} />
+                </mesh>
+                <mesh
+                    geometry={runeObj.geometry}
+                    rotation={runeObj.rotation}
+                    scale={runeObj.scale}
+                >
+                    <runeMaterial
+                        ref={runeMaterialRef}
+                        uNoise={noiseTexture}
+                        uRuneColor={new THREE.Vector3(...color)}
+                    />
+                </mesh>
+            </group>
+        </>
     );
 }
