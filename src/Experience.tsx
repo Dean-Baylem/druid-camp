@@ -7,7 +7,7 @@ export default function Experience() {
         <>
             <fog
                 attach="fog"
-                args={["#08111d", 10, 20]}
+                args={["#08111d", 6, 25]}
             />
             <color
                 args={["#08111d"]}
