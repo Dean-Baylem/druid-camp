@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { shaderMaterial, useGLTF, useTexture, Sparkles } from "@react-three/drei";
-import { useRef } from "react";
+import { Suspense, useRef } from "react";
 import { extend, useFrame } from "@react-three/fiber";
 import type { ThreeElement, ThreeEvent } from "@react-three/fiber";
 import runeVertexShader from "../shaders/rune/vertex.glsl";
@@ -54,6 +54,7 @@ export default function DruidRune({
 
     return (
         <>
+        <Suspense fallback={null}>
             <Sparkles
                 size={12}
                 scale={[0.5, 0.5, 0.5]}
@@ -85,6 +86,7 @@ export default function DruidRune({
                     />
                 </mesh>
             </group>
+        </Suspense>
         </>
     );
 }
